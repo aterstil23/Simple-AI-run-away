@@ -68,17 +68,17 @@ float distance(float a, float b, float c, float d) {
     return sqrt(pow(a - b, 2) + pow(c - d, 2));
 }
 
-/*measures the variation in x that the object runs away depending on the distance dist traveled by the chaser and its position (ho, ve) from the object that runs away from (ho2, vw2) (ho for horizontal and ve for vertical)*/
-float horunway(float dist, float ho2, float ho, float ve2, float ve) {
+/*measures the variation in x that the object runs away depending on the chaser's position (ho, ve) and the chased object position (ho2, ve2) (ho for horizontal and ve for vertical)*/
+float horunway(float ho2, float ho, float ve2, float ve) {
     float theta = angle(ho2, ho, ve2, ve);
-    float resultho = dist * cos(theta);
+    float resultho = 0.5f * cos(theta);
     return resultho;
 }
 
 /*measures the variation of y of the chased object*/
 float verunway(float dist, float ho2, float ho, float ve2, float ve) {
     float theta = angle(ho2, ho, ve2, ve);
-    float resultve = dist * sin(theta);
+    float resultve = 0.5f * sin(theta);
     return resultve;
 }
 
@@ -91,7 +91,7 @@ float calculatedistance() {
         float xnew = x;
         float ynew = y;
         d = distance(xnew, xold, ynew, yold);
-        std::cout << d << std::endl;
+        /*std::cout << d << std::endl;*/
         i++;
     }
 }
@@ -104,8 +104,8 @@ float calculaterunaway() {
         }
         std::cout << "i:" << i << " " << "j:" << j << std::endl;
         if (j == i) {
-            x2 = x2 + (0.5f)*horunway(d, x2, x, y2, y);
-            y2 = y2 + (0.5f)*verunway(d, x2, x, y2, y);
+            x2 = x2 + (0.5f)*horunway(x2, x, y2, y);
+            y2 = y2 + (0.5f)*verunway(x2, x, y2, y);
         }
         /*x2 = x2 + horunway(d, x2, x, y2, y);
         y2 = y2 + verunway(d, x2, x, y2, y);*/
@@ -132,7 +132,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 }
 
 int main(void){
-    std::thread thread1(calculatedistance);
+    /*std::thread thread1(calculatedistance)*//*not necessary*/;
     std::thread thread2(calculaterunaway);
     GLFWwindow* window;
    
