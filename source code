@@ -104,12 +104,12 @@ float calculaterunaway() {
         }
         std::cout << "i:" << i << " " << "j:" << j << std::endl;
         if (j == i) {
-            x2 = x2 + (0.5f)*horunway(x2, x, y2, y);
-            y2 = y2 + (0.5f)*verunway(x2, x, y2, y);
+            x2 = x2 + (0.015f)*horunway(x2, x, y2, y);
+            y2 = y2 + (0.015f)*verunway(x2, x, y2, y);
         }
         /*x2 = x2 + horunway(d, x2, x, y2, y);
         y2 = y2 + verunway(d, x2, x, y2, y);*/
-        Sleep(1000);
+        Sleep(30);
     }
 }
 
