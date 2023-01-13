@@ -1,0 +1,296 @@
+#include "GLFW/glfw3.h"
+#include <iostream>
+#include <cmath>
+#include <thread>
+#include <windows.h>
+
+/*wsad keys to control top right triangle and arrow keys to control down left triangle */
+float x = -0.75f;
+float y = -0.75f;
+
+float x2 = 0.0f;
+float y2 = 0.0f;
+float x3 = 0.75f;
+float y3 = 0.75f;
+float d = NULL;
+int i = 0;
+int j = 0;
+
+bool key_right_pressed = false;
+bool key_up_pressed = false;
+bool key_left_pressed = false;
+bool key_down_pressed = false;
+bool key_w_pressed = false;
+bool key_s_pressed = false;
+bool key_a_pressed = false;
+bool key_d_pressed = false;
+
+
+
+
+
+
+
+float angle(float x2, float x, float y2, float y) {
+
+    float angle;
+    if (x2 - x != 0) {
+        float tan = (y2 - y) / (x2 - x);
+        if (tan > 0) {
+            if (x2 - x > 0) {
+                angle = atan(tan);
+            }
+            else {
+                angle = atan(tan) + 3.141592;
+            }
+        }
+        else if (tan < 0) {
+            if (x2 - x > 0) {
+                angle = atan(tan);
+            }
+            else {
+                angle = atan(tan) + 3.141592;
+            }
+        }
+        else {
+            if (x2 - x > 0) {
+                angle = atan(tan);
+            }
+            else {
+                angle = atan(tan) + 3.141592;
+            }
+        }
+    }
+    else {
+        if (y2 - y > 0) {
+            angle = 1.570796;
+        }
+        else if (y2 - y < 0) {
+            angle = -1.570796;
+        }
+        else {
+            angle = NULL;
+        }
+    }
+    return angle;
+}
+
+float horunway(/*float dist,*/ float ho2, float ho, float ve2, float ve) {
+    float theta = angle(ho2, ho, ve2, ve);
+    /*float resultho = dist * cos(theta);*/
+    float resultho = 0.5f * cos(theta);
+    return resultho;
+}
+
+float verunway(/*float dist,*/ float ho2, float ho, float ve2, float ve) {
+    float theta = angle(ho2, ho, ve2, ve);
+    /*float resultve = dist * sin(theta);*/
+    float resultve = 0.5f * sin(theta);
+    return resultve;
+}
+
+
+
+
+
+
+float distance(float a, float b, float c, float d) {
+    return sqrt(pow(a - b, 2) + pow(c - d, 2));
+}
+
+
+
+float calculatedistance() {
+    while (true) {
+        float xold = x;
+        float yold = y;
+        Sleep(1000);
+        float xnew = x;
+        float ynew = y;
+        d = distance(xnew, xold, ynew, yold);
+        /*std::cout << d << std::endl;*/
+        i++;
+    }
+}
+
+void arrowinput() {
+    while (true) {
+        if (key_right_pressed && key_up_pressed) {
+            x += 0.00707f;
+            y += 0.00707f;
+        }
+        else if (key_right_pressed && key_down_pressed) {
+            x += 0.00707f;
+            y -= 0.00707f;
+        }
+        else if (key_left_pressed && key_up_pressed) {
+            x -= 0.00707f;
+            y += 0.00707f;
+        }
+        else if (key_left_pressed && key_down_pressed) {
+            x -= 0.00707f;
+            y -= 0.00707f;
+        }
+        else if (key_right_pressed) {
+            x += 0.01f;
+        }
+        else if (key_down_pressed) {
+            y -= 0.01f;
+        }
+        else if (key_left_pressed) {
+            x -= 0.01f;
+        }
+        else if (key_up_pressed) {
+            y += 0.01f;
+        }
+        Sleep(1);
+    }
+}
+
+void wsad_input() {
+    while (true) {
+        if (key_d_pressed && key_w_pressed) {
+            x3 += 0.00707f;
+            y3 += 0.00707f;
+        }
+        else if (key_d_pressed && key_s_pressed) {
+            x3 += 0.00707f;
+            y3 -= 0.00707f;
+        }
+        else if (key_a_pressed && key_w_pressed) {
+            x3 -= 0.00707f;
+            y3 += 0.00707f;
+        }
+        else if (key_a_pressed && key_s_pressed) {
+            x3 -= 0.00707f;
+            y3 -= 0.00707f;
+        }
+        else if (key_d_pressed) {
+            x3 += 0.01f;
+        }
+        else if (key_s_pressed) {
+            y3 -= 0.01f;
+        }
+        else if (key_a_pressed) {
+            x3 -= 0.01f;
+        }
+        else if (key_w_pressed) {
+            y3 += 0.01f;
+        }
+        Sleep(1);
+    }
+}
+
+
+float calculaterunaway() {
+    while (true) {
+        if (j < i) {
+            j++;
+        }
+        /*std::cout << "i:" << i << " " << "j:" << j << std::endl;*/
+        if (j == i) {
+            x2 = x2 + (0.00725f)*(2.0f-2*(distance(x2, x, y2, y)/1.414f))*horunway(x2, x, y2, y)+ (0.00725f) * (2.0f - 2 * (distance(x2, x3, y2, y3) / 1.414f))*horunway(x2, x3, y2, y3);
+            y2 = y2 + (0.00725f)* (2.0f - 2 * (distance(x2, x, y2, y) / 1.414f))*verunway(x2, x, y2, y)+ (0.00725f) * (2.0f - 2 * (distance(x2, x3, y2, y3) / 1.414f))* verunway(x2, x3, y2, y3);
+        }
+        /*each horunaway and verunaway are added two times with 2 different set of arguments arguments ((x, y) and (x3, y3) position of chaser) for each incrementation of x2 and y2 (positions of chased object)*/
+        Sleep(30);
+    }
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{   if (key == GLFW_KEY_RIGHT) {
+        key_right_pressed = (action == GLFW_REPEAT || action == GLFW_PRESS );
+    }
+    if (key == GLFW_KEY_UP) {
+        key_up_pressed = (action == GLFW_REPEAT || action == GLFW_PRESS );
+    }
+    if (key == GLFW_KEY_LEFT) {
+        key_left_pressed = (action == GLFW_REPEAT || action == GLFW_PRESS);
+    }
+    if (key == GLFW_KEY_DOWN) {
+        key_down_pressed = (action == GLFW_REPEAT || action == GLFW_PRESS);
+    }
+    if (key == GLFW_KEY_W) {
+        key_w_pressed = (action == GLFW_REPEAT || action == GLFW_PRESS);
+    }
+    if (key == GLFW_KEY_S) {
+        key_s_pressed = (action == GLFW_REPEAT || action == GLFW_PRESS);
+    }
+    if (key == GLFW_KEY_A) {
+        key_a_pressed = (action == GLFW_REPEAT || action == GLFW_PRESS);
+    }
+    if (key == GLFW_KEY_D) {
+        key_d_pressed = (action == GLFW_REPEAT || action == GLFW_PRESS);
+    }
+}
+
+int main(void){
+    std::thread thread2(calculaterunaway);
+    std::thread thread1(arrowinput);
+    std::thread thread3(wsad_input);
+   
+
+
+    GLFWwindow* window;
+   
+    
+    
+
+    /* Initialize the library */
+    if (!glfwInit())
+        return -1;
+
+    /* Create a windowed mode window and its OpenGL context */
+    window = glfwCreateWindow(900, 900, "Hello World", NULL, NULL);
+    glfwSetKeyCallback(window, key_callback);
+    
+    /*while (is_RIGHT_down && is_UP_down)
+    {
+        std::cout << "right and up repeat" << std::endl;
+
+    }*/
+    
+    if (!window)
+    {
+        glfwTerminate();
+        return -1;
+    }
+
+    /* Make the window's context current */
+    glfwMakeContextCurrent(window);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
+
+    /* Loop until the user closes the window */
+    while (!glfwWindowShouldClose(window))
+    {
+      
+        /* Render here */
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glBegin(GL_TRIANGLES);
+        glVertex2f(x, y);
+        glVertex2f(x+0.04f, y+0.08f);
+        glVertex2f(x+0.08f, y);
+        glEnd();
+
+        glBegin(GL_TRIANGLES);
+        glVertex2f(x2, y2);
+        glVertex2f(x2+0.04f, y2+0.08f);
+        glVertex2f(x2+0.08f, y2);
+        glEnd();
+
+        glBegin(GL_TRIANGLES);
+        glVertex2f(x3, y3);
+        glVertex2f(x3 + 0.04f, y3 + 0.08f);
+        glVertex2f(x3 + 0.08f, y3);
+        glEnd();
+        /* Swap front and back buffers */
+        glfwSwapBuffers(window);
+
+        /* Poll for and process events */
+        glfwPollEvents();
+    }
+
+    glfwTerminate();
+    return 0;
+}
