@@ -133,59 +133,6 @@ void cursortargetmove() {
 
 
 
-float distance(float a, float b, float c, float d) {
-    return sqrt(pow(a - b, 2) + pow(c - d, 2));
-}
-
-
-
-float calculatedistance() {
-    while (true) {
-        float xold = x;
-        float yold = y;
-        Sleep(1000);
-        float xnew = x;
-        float ynew = y;
-        d = distance(xnew, xold, ynew, yold);
-        /*std::cout << d << std::endl;*/
-        i++;
-    }
-}
-
-void input() {
-    while (true) {
-        if (key_right_pressed && key_up_pressed) {
-            x += 0.00707f;
-            y += 0.00707f;
-        }
-        else if (key_right_pressed && key_down_pressed) {
-            x += 0.00707f;
-            y -= 0.00707f;
-        }
-        else if (key_left_pressed && key_up_pressed) {
-            x -= 0.00707f;
-            y += 0.00707f;
-        }
-        else if (key_left_pressed && key_down_pressed) {
-            x -= 0.00707f;
-            y -= 0.00707f;
-        }
-        else if (key_right_pressed) {
-            x += 0.01f;
-        }
-        else if (key_down_pressed) {
-            y -= 0.01f;
-        }
-        else if (key_left_pressed) {
-            x -= 0.01f;
-        }
-        else if (key_up_pressed) {
-            y += 0.01f;
-        }
-        Sleep(1);
-    }
-}
-
 
 float calculaterunaway() {
     while (true) {
@@ -201,20 +148,7 @@ float calculaterunaway() {
     }
 }
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{   if (key == GLFW_KEY_RIGHT) {
-        key_right_pressed = (action == GLFW_REPEAT || action == GLFW_PRESS );
-    }
-    if (key == GLFW_KEY_UP) {
-        key_up_pressed = (action == GLFW_REPEAT || action == GLFW_PRESS );
-    }
-    if (key == GLFW_KEY_LEFT) {
-        key_left_pressed = (action == GLFW_REPEAT || action == GLFW_PRESS);
-    }
-    if (key == GLFW_KEY_DOWN) {
-        key_down_pressed = (action == GLFW_REPEAT || action == GLFW_PRESS);
-    }
-}
+
 
     
 
@@ -222,7 +156,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 int main(void){
     
     std::thread thread2(calculaterunaway);
-    std::thread thread1(input);
+   
  
     std::thread thread4(cursortargetmove);
 
@@ -240,8 +174,7 @@ int main(void){
     window = glfwCreateWindow(900, 900, "Hello World", NULL, NULL);
     glfwSetKeyCallback(window, key_callback);
     std::thread thread3(mouseinput, window);
-    /*std::thread thread5(executesingleclick, window);
-    std::thread thread3(verifydoubleclick, window);*/
+   
   
     
     if (!window)
