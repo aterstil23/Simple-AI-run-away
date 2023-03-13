@@ -10,3 +10,7 @@ video that i watched to use the library GLFW in visual studio
 There are two versions up to date.
 One with only key input to make the chaser move (arrow keys).
 One with mouse input(click the target location you want the chaser to go to) to make the chaser move.
+
+
+https://user-images.githubusercontent.com/121896803/224853859-7848ebd5-c4b4-44ae-bdaf-a22dace1af3c.mp4
+
